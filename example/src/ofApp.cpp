@@ -78,3 +78,9 @@ void ofApp::keyPressed(int key) {
 		ofxTextFlow::addText("key code: " + ofToString((char)key));
 	}
 }
+
+//--------------------------------------------------------------
+void ofApp::logLine(string s)
+{
+	ofxTextFlow::addText(s);
+}

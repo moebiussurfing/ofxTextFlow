@@ -7,7 +7,7 @@ ofxTextFlow::ofxTextFlow() {
 	showing = true;
 	BBoxShowing = false;
 	textColor.set(255);
-	bgColor.set(0);
+	bgColor.set(0, 200);
 	maxLineNum = 30;
 
 	position = glm::vec2(10, 10);

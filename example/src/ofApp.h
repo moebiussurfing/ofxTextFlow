@@ -1,6 +1,7 @@
 #pragma once
-#pragma once
+
 #include "ofMain.h"
+
 #include "ofxTextFlow.h"
 
 class ofApp : public ofBaseApp{
@@ -11,4 +12,7 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		void keyPressed(int key);
+
+		//helper
+		void logLine(string s);
 };
