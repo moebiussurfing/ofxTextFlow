@@ -14,6 +14,10 @@ ofxTextFlow::ofxTextFlow() {
 
 	ofAddListener(ofEvents().update, this, &ofxTextFlow::update);
 	ofAddListener(ofEvents().draw, this, &ofxTextFlow::draw);
+
+	//TODO:
+	//to not draw upfront of everething..
+	//ofRemoveListener(ofEvents().draw, this, &ofxTextFlow::draw, OF_EVENT_ORDER_AFTER_APP);
 }
 
 ofxTextFlow::~ofxTextFlow() {

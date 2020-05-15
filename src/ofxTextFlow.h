@@ -59,7 +59,7 @@ private:
 	int margin = 5;
 	bool bRounded = false;
 	float roundedSize = 10.0f;
-	bool showFPS;
+	bool showFPS = false;
 	float lineHeight = 14;
 	float fontSize = 9;
 	int BBoxWidth = 400;
