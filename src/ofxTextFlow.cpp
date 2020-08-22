@@ -33,15 +33,16 @@ void ofxTextFlow::update(ofEventArgs & e) {
 void ofxTextFlow::draw(ofEventArgs & e) {
 	if (showing)
 	{
+		mutex.lock();
+
 		ofPushStyle();
 		ofPushMatrix();
 
-		mutex.lock();
-
 		int yPadTitle = fontSize + lineHeight;//y pad below title
 		int heightMax = fontSize + lineHeight * maxLineNum + yPadTitle;
+		//int heightMax = lineHeight * maxLineNum;
 
-		//bbox
+		//1. bbox
 		if (BBoxShowing)
 		{
 			ofSetColor(bgColor);
@@ -69,9 +70,11 @@ void ofxTextFlow::draw(ofEventArgs & e) {
 			}
 		}
 
-		//print title
+		//go to setted position
+		ofTranslate(position.x, position.y + fontSize);//bc draw from baseline
+
+		//2. print title
 		ofSetColor(textColor);
-		ofTranslate(position.x, position.y + fontSize);
 
 		string str = title;
 		if (showFPS)
@@ -80,15 +83,39 @@ void ofxTextFlow::draw(ofEventArgs & e) {
 			str += ofToString(ofGetFrameRate(), 0);
 			str += " FPS";
 		}
+
+		float _x, _y;
+
+		//at the top
+		if (!bTitlePositionBottom)
+		{
+			_x = 0;
+			_y = 0;
+		}
+		//at the bottom
+		else
+		{
+			_x = 0;
+			_y = heightMax - 3*fontSize;
+		}
+
+		if (bTitlePositionBottom)
+		{
+
+		}
+
 		if (font.isLoaded()) {
-			font.drawString(str, 0, 0);
+			font.drawString(str, _x, _y);
 		}
 		else
 		{
-			ofDrawBitmapString(str, 0, 0);
+			ofDrawBitmapString(str, _x, _y);
 		}
 
-		ofTranslate(0, yPadTitle);
+		//draw log lines
+
+		//direction from top to bottom
+		ofTranslate(0, 0);
 
 		//print lines
 		for (auto &l : lines) {
@@ -102,15 +129,17 @@ void ofxTextFlow::draw(ofEventArgs & e) {
 			ofTranslate(0, lineHeight);
 		}
 
-		mutex.unlock();
-
 		if (BBoxShowing)
 		{
 			ofPopMatrix();
 		}
-		
+
 		ofPopMatrix();
 		ofPopStyle();
+
+		//-
+
+		mutex.unlock();
 	}
 }
 
@@ -140,6 +169,11 @@ void ofxTextFlow::clear() {
 void ofxTextFlow::setMaxLineNum(int _maxLineNum) {
 	singletonGenerate();
 	singleton->maxLineNum = _maxLineNum;
+}
+void ofxTextFlow::setMaxHeight(float _maxH) {
+	singletonGenerate();
+	singleton->maxLineNum = (int)singleton->fontSize* (_maxH / singleton->lineHeight);
+
 }
 
 int ofxTextFlow::getMaxLineNum() {
@@ -194,6 +228,11 @@ ofColor ofxTextFlow::getBackgroundColor() {
 	return singleton->bgColor;
 }
 
+void ofxTextFlow::setTitlePositionBottom(bool b) {
+	singletonGenerate();
+	singleton->bTitlePositionBottom = b;
+}
+
 void ofxTextFlow::setTitle(string _title) {
 	singletonGenerate();
 	singleton->title = _title;
@@ -201,8 +240,11 @@ void ofxTextFlow::setTitle(string _title) {
 
 void ofxTextFlow::loadFont(string _path, float _size) {
 	singletonGenerate();
+
 	singleton->fontSize = _size;
-	singleton->font.load(_path, _size);
+	bool b = singleton->font.load(_path, _size);
+	if (!b) singleton->font.load(OF_TTF_MONO, _size);//avoid crash when non existing font
+	//singleton->font.load(_path, _size);
 }
 
 //layout

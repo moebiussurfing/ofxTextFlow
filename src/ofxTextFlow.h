@@ -1,6 +1,11 @@
 #pragma once
 #include "ofMain.h"
 
+//TODO:
+//+	add variable real line height
+//+	add set max height
+//+ add multiple instances/panels?
+
 class ofxTextFlow {
 
 public:
@@ -12,6 +17,10 @@ public:
 	void draw(ofEventArgs &e);
 
 	static void setTitle(string title);
+
+	bool bTitlePositionBottom = false;
+	static void setTitlePositionBottom(bool b);
+
 	static void addText(string txt);
 	static void clear();
 	
@@ -30,6 +39,9 @@ public:
 	static void setPosition(glm::vec2 position);
 	static void setPosition(float _x, float _y);
 	static void setMaxLineNum(int _maxLineNum);
+	static void setMaxHeight(float _maxH);
+
+
 	static void setTabbed(bool b, int num = 1);
 	static void setFloatResolution(int res = 2);
 	static void setMarginBorders(int _margin);
